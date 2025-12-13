@@ -19,8 +19,15 @@ export class PostsService {
   }
 
   // 전체 조회(작성자 정보)
-  async findAll() {
+  async findAll(page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+
     return this.prisma.post.findMany({
+      skip: skip,
+      take: limit,
+      orderBy: {
+        createdAt: 'desc',
+      },
       include: {
         author: {
           select: { email: true, nickname: true },
