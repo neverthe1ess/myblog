@@ -12,7 +12,7 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "./prismaNamespace.js"
+import type * as Prisma from "./prismaNamespace"
 
 
 const config: runtime.GetPrismaClientConfig = {
@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.1.0",
   "engineVersion": "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\n// 여기에 하나씩 모델을 추가해 봅시다.\n// 회원\nmodel User {\n  id       Int       @id @default(autoincrement())\n  email    String    @unique\n  password String\n  nickname String\n  posts    Post[]\n  // 내가 쓴 댓글 보기\n  comments Comment[]\n}\n\n// 게시글  \nmodel Post {\n  id        Int      @id @default(autoincrement())\n  title     String\n  content   String\n  viewCount Int      @default(0)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  author   User      @relation(fields: [authorId], references: [id])\n  authorId Int\n  // 게시글이 달린 댓글 보기\n  comments Comment[]\n}\n\n// 댓글\nmodel Comment {\n  id        Int      @id @default(autoincrement())\n  content   String\n  createdAt DateTime @default(now())\n\n  post   Post @relation(fields: [postId], references: [id])\n  postId Int\n\n  author   User @relation(fields: [authorId], references: [id])\n  authorId Int\n}\n",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\n// 여기에 하나씩 모델을 추가해 봅시다.\n// 회원\nmodel User {\n  id       Int       @id @default(autoincrement())\n  email    String    @unique\n  password String\n  nickname String\n  posts    Post[]\n  // 내가 쓴 댓글 보기\n  comments Comment[]\n}\n\n// 게시글  \nmodel Post {\n  id        Int      @id @default(autoincrement())\n  title     String\n  content   String\n  viewCount Int      @default(0)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  author   User      @relation(fields: [authorId], references: [id])\n  authorId Int\n  // 게시글이 달린 댓글 보기\n  comments Comment[]\n}\n\n// 댓글\nmodel Comment {\n  id        Int      @id @default(autoincrement())\n  content   String\n  createdAt DateTime @default(now())\n\n  post   Post @relation(fields: [postId], references: [id])\n  postId Int\n\n  author   User @relation(fields: [authorId], references: [id])\n  authorId Int\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -37,10 +37,10 @@ async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Modul
 }
 
 config.compilerWasm = {
-  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_bg.postgresql.mjs"),
+  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_bg.postgresql.js"),
 
   getQueryCompilerWasmModule: async () => {
-    const { wasm } = await import("@prisma/client/runtime/query_compiler_bg.postgresql.wasm-base64.mjs")
+    const { wasm } = await import("@prisma/client/runtime/query_compiler_bg.postgresql.wasm-base64.js")
     return await decodeBase64AsWasm(wasm)
   }
 }

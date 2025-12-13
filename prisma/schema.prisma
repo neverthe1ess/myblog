@@ -12,40 +12,40 @@ datasource db {
 
 // 여기에 하나씩 모델을 추가해 봅시다.
 // 회원
-model User{
-  id          Int       @id @default(autoincrement())
-  email       String    @unique
-  password    String
-  nickname    String
-  posts       Post[]
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  password String
+  nickname String
+  posts    Post[]
   // 내가 쓴 댓글 보기
-  comments    Comment[]
+  comments Comment[]
 }
 
 // 게시글  
-model Post{
-  id          Int       @id @default(autoincrement())
-  title       String
-  content     String
-  viewCount   Int       @default(0)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  viewCount Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  author      User      @relation(fields: [authorId], references: [id])
-  authorId    Int 
+  author   User      @relation(fields: [authorId], references: [id])
+  authorId Int
   // 게시글이 달린 댓글 보기
-  comments    Comment[]
+  comments Comment[]
 }
 
 // 댓글
-model Comment{
-  id          Int       @id @default(autoincrement())
-  content     String    
-  createdAt   DateTime  @default(now())
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
 
-  post        Post      @relation(fields: [postId], references: [id])
-  postId      Int
+  post   Post @relation(fields: [postId], references: [id])
+  postId Int
 
-  author      User      @relation(fields: [authorId], references: [id])
-  authorId    Int 
+  author   User @relation(fields: [authorId], references: [id])
+  authorId Int
 }
