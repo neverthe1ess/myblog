@@ -14,6 +14,8 @@ import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { User } from 'src/auth/decorator/user.decorator';
+import { AuthUser } from 'src/auth/types/auth-user.type';
 
 @Controller('posts')
 export class PostsController {
@@ -21,8 +23,8 @@ export class PostsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(@Body() createPostDto: CreatePostDto, @Request() req) {
-    return this.postsService.create(createPostDto, req.user.userId);
+  create(@Body() createPostDto: CreatePostDto, @User() user: AuthUser) {
+    return this.postsService.create(createPostDto, user.userId);
   }
 
   @Get()
