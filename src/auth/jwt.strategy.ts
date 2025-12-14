@@ -5,16 +5,16 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(private configService: ConfigService) {
-        super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: false,
-            secretOrKey: configService.getOrThrow('JWT_SECRET'),
-        });
-    }
+  constructor(private configService: ConfigService) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: configService.getOrThrow('JWT_SECRET'),
+    });
+  }
 
-    async validate(payload: any) {
-        console.log('토큰 검사 성공! 유저:', payload);
-        return { userId: payload.sub, username: payload.username };
-    }
+  async validate(payload: any) {
+    console.log('토큰 검사 성공! 유저:', payload);
+    return { userId: payload.sub, username: payload.username };
+  }
 }

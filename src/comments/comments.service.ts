@@ -5,8 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CommentsService {
-  constructor(private readonly prisma: PrismaService) { }
-
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createCommentDto: CreateCommentDto, authorId: number) {
     return this.prisma.comment.create({
@@ -24,14 +23,14 @@ export class CommentsService {
         author: { select: { nickname: true } },
         post: { select: { title: true } },
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
   }
 
   findOne(id: number) {
     return this.prisma.comment.findUnique({
       where: { id },
-      include: { author: true, post: true }
+      include: { author: true, post: true },
     });
   }
 

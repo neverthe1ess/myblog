@@ -3,11 +3,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
-import * as bcypt from 'bcrypt'
+import * as bcypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) { } // Dependecy Injection
+  constructor(private prisma: PrismaService) {} // Dependecy Injection
 
   // 회원가입
   async create(createUserDto: CreateUserDto) {

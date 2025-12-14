@@ -3,10 +3,9 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
-
 @Injectable()
 export class PostsService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   // 글쓰기 (제목, 내용 + 작성자ID)
   async create(createPostDto: CreatePostDto, authorId: number) {
@@ -14,7 +13,7 @@ export class PostsService {
       data: {
         ...createPostDto,
         authorId: authorId,
-      }
+      },
     });
   }
 
@@ -31,19 +30,19 @@ export class PostsService {
       include: {
         author: {
           select: { email: true, nickname: true },
-        }
-      }
+        },
+      },
     });
   }
-  // 상세 조회 
+  // 상세 조회
   findOne(id: number) {
     return this.prisma.post.findUnique({
       where: { id },
       include: {
         author: {
           select: { email: true, nickname: true },
-        }
-      }
+        },
+      },
     });
   }
 
