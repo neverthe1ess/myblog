@@ -1,7 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '../generated/client';
 import * as bcrypt from 'bcrypt';
+
+export type UserWithoutPassword = Omit<User, 'password'>;
 
 @Injectable()
 export class AuthService {
@@ -10,7 +13,10 @@ export class AuthService {
     private jwtService: JwtService, // 2. 토큰 발급용
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
+  async validateUser(
+    email: string,
+    pass: string,
+  ): Promise<UserWithoutPassword | null> {
     const user = await this.usersService.findOne(email); // 이메일로 찾고
 
     if (user && (await bcrypt.compare(pass, user.password))) {
@@ -20,7 +26,7 @@ export class AuthService {
     return null; // 실패 시 null
   }
   // 2. 로그인 (토큰 발급)
-  async login(user: any) {
+  async login(user: UserWithoutPassword) {
     const payload = { username: user.nickname, sub: user.id }; // 토큰에 담을 정보
     return {
       access_token: this.jwtService.sign(payload), // 서명해서 토큰 생성하기
