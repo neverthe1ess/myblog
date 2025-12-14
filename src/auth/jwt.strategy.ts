@@ -13,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any) {
+  validate(payload: any) {
     console.log('토큰 검사 성공! 유저:', payload);
     return { userId: payload.sub, username: payload.username };
   }

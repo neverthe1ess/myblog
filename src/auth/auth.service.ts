@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../generated/client';
@@ -29,7 +29,7 @@ export class AuthService {
   async login(user: UserWithoutPassword) {
     const payload = { username: user.nickname, sub: user.id }; // 토큰에 담을 정보
     return {
-      access_token: this.jwtService.sign(payload), // 서명해서 토큰 생성하기
+      access_token: await this.jwtService.signAsync(payload), // 객체 내부는 Nest에서 Promise를 자동으로 처리 못함 -> await 사용
     };
   }
 }
