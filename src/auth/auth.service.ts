@@ -27,7 +27,11 @@ export class AuthService {
   }
   // 2. 로그인 (토큰 발급)
   async login(user: UserWithoutPassword) {
-    const payload = { username: user.nickname, sub: user.id }; // 토큰에 담을 정보
+    const payload = {
+      username: user.nickname,
+      sub: user.id,
+      email: user.email,
+    }; // 토큰에 담을 정보
     return {
       access_token: await this.jwtService.signAsync(payload), // 객체 내부는 Nest에서 Promise를 자동으로 처리 못함 -> await 사용
     };

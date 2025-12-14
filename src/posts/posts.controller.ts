@@ -6,28 +6,27 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
   Request,
   Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { User } from 'src/auth/decorator/user.decorator';
 import { AuthUser } from 'src/auth/types/auth-user.type';
+import { Public } from 'src/auth/decorator/public.decorator';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   create(@Body() createPostDto: CreatePostDto, @User() user: AuthUser) {
-    return this.postsService.create(createPostDto, user.userId);
+    return this.postsService.create(createPostDto, user.id);
   }
 
   @Get()
+  @Public()
   findAll(
     @Query('page') page: string = '1',
     @Query('limit') limit: string = '10',
@@ -36,6 +35,7 @@ export class PostsController {
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(+id);
   }

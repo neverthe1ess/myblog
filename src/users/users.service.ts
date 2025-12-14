@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -11,13 +11,19 @@ export class UsersService {
 
   // 회원가입
   async create(createUserDto: CreateUserDto) {
+    const duplicateUser = await this.findOne(createUserDto.email);
+    if (duplicateUser) {
+      throw new ConflictException('User already exists');
+    }
     const hashedPassword = await bcypt.hash(createUserDto.password, 10);
-    return this.prisma.user.create({
+    const savedUser = await this.prisma.user.create({
       data: {
         ...createUserDto,
         password: hashedPassword,
       },
     });
+    const { password, ...result } = savedUser;
+    return result;
   }
   // 전체 조회
   findAll() {
